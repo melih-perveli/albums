@@ -1,30 +1,35 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <div class="container">
+    <Headers />
+    <div
+      v-for="photo in photos"
+      :key="photo.name"
+      class="border text-center border-4 rounded my-3 p-3"
+    >
+      <div class="d-flex bd-highlight">
+        <h1 class="p-2 w-100 bd-highlight">Album ID : {{ photo.name }}</h1>
+      </div>
+      <AlbumsCard :name="photo.name" :data="photo.value" />
+    </div>
+    <Foother class="fixed-bottom" />
   </div>
-  <router-view/>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
+import { mapState } from "vuex";
+import AlbumsCard from "./components/AlbumsCard.vue";
+import Headers from "./components/Headers.vue";
+import Foother from "./components/Foother.vue";
 
-#nav {
-  padding: 30px;
-}
+export default {
+  name: "App",
+  components: { AlbumsCard, Headers, Foother },
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+  computed: {
+    ...mapState(["photos"]),
+  },
+  created() {
+    this.$store.dispatch("loadPhotos");
+  },
+};
+</script>
